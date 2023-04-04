@@ -23,7 +23,8 @@ CentOS / RHEL
 ## To use
 
 Server side: 
-`python server.py
+
+`python server.py`
 
 (`sudo` privileges are required)
 
