@@ -15,7 +15,7 @@ def encode_num(num: int):
     elif 63 <= num <= 189:
         return (num + 64 + 1 + 1, False)
     elif 190 <= num <= 259:
-        return (num - 128 + 1 + 1 + 1, True)
+        return (num - 128 + 3, True)
     return None
 
 

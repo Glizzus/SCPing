@@ -43,7 +43,7 @@ def ping_value_to_word(ttl: int):
         elif 129 <= ttl <= 255:
             return ttl - 65 - 1
         elif 321 <= ttl <= 390:
-            return ttl - 65 - 1 - 65
+            return ttl - 65 - 65 - 1
         else:
             return -1
 
@@ -70,8 +70,7 @@ class MagicWord:
 
 
 def dump():
-    """Generates ICMP tcpdump lines"""
-    args = ('sudo', 'tcpdump', '-vl', 'icmp', 'and', 'inbound')
+    args = ['sudo', 'tcpdump', '-vlU', 'icmp', 'and', 'inbound']
     with sub.Popen(args, stdout=sub.PIPE) as tcpdump:
         for line in tcpdump.stdout:
             yield line.decode()
@@ -93,15 +92,15 @@ def parse_ttl(tcpdump_line: str):
             # The DF Flag represents the 9th bit
             if "DF" in flag:
                 val += 256
-    return -1 if not val else val
+    if val:
+        yield val
 
 
 def listen():
     """Listens for ICMP traffic and generates words."""
     for line in dump():
-        val = parse_ttl(line)
-        if val:
-            yield represent_as_word(val)
+        for val in parse_ttl(line):
+            yield ping_value_to_word(val)
 
 
 def write_byte_list(byt: list, file_name: str):
@@ -125,9 +124,11 @@ def main():
     def flush_buffer():
         nonlocal data, filename
         write_byte_list(data, filename)
+        data = []
 
     for word in listen():
         if word == MagicWord.BEGIN:
+            print('begin')
             begun = True
         elif word == MagicWord.TAKE_FILENAME:
             file_mode = True
@@ -138,7 +139,7 @@ def main():
             begun = False
             print('Finished writing', filename)
         elif not begun:
-            return
+            continue
         else:
             main_byte = word[0:1]
             if file_mode:
