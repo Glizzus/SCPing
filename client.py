@@ -1,6 +1,7 @@
 import subprocess as sub
 import sys
 from time import sleep
+import os
 
 
 def encode_num(num: int):
@@ -10,12 +11,19 @@ def encode_num(num: int):
     returned is whether to set the DF flag.
     """
     if 0 <= num <= 62:
-        return (num + 65, False)
+        return (num + 64 + 1, False)
     elif 63 <= num <= 189:
-        return (num + 65 + 1, False)
+        return (num + 64 + 1 + 1, False)
     elif 190 <= num <= 259:
-        # I don't know why we add 3 here. It works though
-        return (num - 128 + 3, True)
+        return (num - 128 + 1 + 1 + 1, True)
+    return None
+
+
+for i in range(500):
+    print(i, encode_num(i))
+
+exit()
+
 
 
 def encode_char(char: str):
@@ -58,16 +66,23 @@ def ping_factory(host: str):
     Returns a function that is used to ping the host.
     """
 
-    def ping(ttl: int, df: bool = False):
-        """
-        Performs the ping command.
-        """
+    def ping_windows(ttl: int, df: bool = False):
         args = ('ping', '-i', str(ttl), '-n', '1')
         if df:
             args += ('-f',)
         args += (host,)
         sub.Popen(args, stdout=sub.PIPE)
-    return ping
+
+    def ping_linux(ttl: int, df: bool = False):
+        args = ('ping', '-t', str(ttl))
+        if df:
+            args += ('-M', 'dont')
+        args += (host,)
+        sub.Popen(args, stdout=sub.PIPE)
+
+    if os.name == 'nt':
+        return ping_windows
+    return ping_linux
 
 
 def main():

@@ -38,11 +38,11 @@ def ping_value_to_word(ttl: int):
     """
 
     def to_int():
-        if 64 < ttl < 128:
+        if 65 <= ttl <= 127:
             return ttl - 65
-        elif 128 < ttl < 256:
+        elif 129 <= ttl <= 255:
             return ttl - 65 - 1
-        elif 320 < ttl < 391:
+        elif 321 <= ttl <= 390:
             return ttl - 65 - 1 - 65
         else:
             return -1
@@ -50,7 +50,14 @@ def ping_value_to_word(ttl: int):
     result = to_int()
     if result < 0:
         return None
+    print(result)
+    return
     return represent_as_word(result)
+
+for i in range(500):
+    ping_value_to_word(i)
+
+exit()
 
 
 class MagicWord:
