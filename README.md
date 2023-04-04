@@ -4,6 +4,8 @@ Unidirectional file transfer using `ping` and `tcpdump`.
 
 Currently, this only supports file upload. I have no clue if Bidirectional file transfer is possible as of now.
 
+Also, because ICMP is not intended for streaming, sometimes bytes will be out of order. This may render images corrupted and binaries unusable. This may be best used for plain text exfiltration, where errors can easily be spotted and fixed.
+
 ## Prerequisites
 
 The server requires `tcpdump`. Additionally, it must be in your system `PATH` variable.
