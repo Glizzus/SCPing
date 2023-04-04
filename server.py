@@ -50,14 +50,7 @@ def ping_value_to_word(ttl: int):
     result = to_int()
     if result < 0:
         return None
-    print(result)
-    return
     return represent_as_word(result)
-
-for i in range(500):
-    ping_value_to_word(i)
-
-exit()
 
 
 class MagicWord:

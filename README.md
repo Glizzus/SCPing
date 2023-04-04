@@ -21,7 +21,7 @@ CentOS / RHEL
 ## To use
 
 Server side: 
-> `python server.py`
+`python server.py
 
 (`sudo` privileges are required)
 
@@ -29,7 +29,7 @@ Client side: Run using SCP syntax
 
 Example:
 
-> `python client.py catpicture.jpg 192.168.1.1:/home/users/jdoe/Pictures/cat.jpg`
+`python client.py catpicture.jpg 192.168.1.1:/home/users/jdoe/Pictures/cat.jpg`
 
 ## How it works
 

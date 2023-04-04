@@ -19,13 +19,6 @@ def encode_num(num: int):
     return None
 
 
-for i in range(500):
-    print(i, encode_num(i))
-
-exit()
-
-
-
 def encode_char(char: str):
     """
     Encodes a charactor to give information about how to ping it.
